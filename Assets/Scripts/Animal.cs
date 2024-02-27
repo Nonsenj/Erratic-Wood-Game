@@ -9,18 +9,25 @@ public enum AnimalState
 {
     Idle,
     Moving,
+    Chase,
 
 }
 [RequireComponent(typeof(NavMeshAgent))]
 public class Animal : MonoBehaviour
 {
     [Header("Wander")]
-    public float wanderDistance = 50f;
-    public float walkSpeed = 5f;
-    public float maxWalkTime = 6f;
+    [SerializeField] protected float wanderDistance = 50f;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float maxWalkTime = 6f;
 
     [Header("Idle")]
-    public float idleTime = 5f;
+    [SerializeField] private float idleTime = 5f;
+
+    [Header("Chase")]
+    [SerializeField] private float runSpeed = 8f;
+
+    [Header("Attributes")]
+    [SerializeField] private int health = 10;
 
     protected NavMeshAgent agent;
     protected AnimalState currentState = AnimalState.Idle;
@@ -49,23 +56,38 @@ public class Animal : MonoBehaviour
             case AnimalState.Moving:
                 HandleMoveState();
                 break;
+            case AnimalState.Chase:
+                HandleChaseState();
+                break;
         }
     }
 
     protected Vector3 GetRandomNavMeshPosition(Vector3 origin, float distance)
     {
-        Vector3 randomDirection = Random.insideUnitSphere * distance;
-        randomDirection += origin;
-        NavMeshHit navMeshHit;
+        for (int i=0; i<5; i++)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * distance;
+            randomDirection += origin;
+            NavMeshHit navMeshHit;
 
-        if (NavMesh.SamplePosition(randomDirection, out navMeshHit, distance, NavMesh.AllAreas))
-        {
-            return navMeshHit.position;
+            if (NavMesh.SamplePosition(randomDirection, out navMeshHit, distance, NavMesh.AllAreas))
+            {
+                return navMeshHit.position;
+            }
+
         }
-        else
-        {
-            return GetRandomNavMeshPosition(origin, distance);
-        }
+
+        return origin;
+    }
+
+    protected virtual void CheckChaseConditions()
+    {
+
+    }
+
+    protected virtual void HandleChaseState()
+    {
+        StopAllCoroutines();
     }
 
     protected virtual void HandleIdleState()
@@ -93,7 +115,7 @@ public class Animal : MonoBehaviour
     {
         float startTime = Time.time;
 
-        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
+        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance && agent.isActiveAndEnabled)
         {
             if (Time.time - startTime >= maxWalkTime)
             {
@@ -101,9 +123,10 @@ public class Animal : MonoBehaviour
                 SetState(AnimalState.Idle);
                 yield break;
             }
+
+            CheckChaseConditions();
             yield return null;
         }
-
         SetState(AnimalState.Idle);
     }
 
@@ -118,13 +141,24 @@ public class Animal : MonoBehaviour
 
     protected virtual void OnStateChanged(AnimalState newState)
     {
+        if (newState == AnimalState.Moving)
+            agent.speed = walkSpeed;
+        if (newState == AnimalState.Chase)
+            agent.speed = runSpeed;
         UpdateState();
     }
 
-    private void OnDrawGizmos()
+    public virtual void RecieveDamage(int damage)
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, wanderDistance);
-        //Gizmos.DrawWireSphere(transform.position, detectionRange);
+        health -= damage;
+
+        if (health <= 0)
+            Die();
+    }
+
+    protected virtual void Die()
+    {
+        StopAllCoroutines();
+        Destroy(gameObject);
     }
 }
