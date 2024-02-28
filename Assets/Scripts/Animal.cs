@@ -72,11 +72,15 @@ public class Animal : MonoBehaviour
 
             if (NavMesh.SamplePosition(randomDirection, out navMeshHit, distance, NavMesh.AllAreas))
             {
+                /*Debug.Log(this.GetInstanceID());
+                Debug.Log("Move");*/
                 return navMeshHit.position;
             }
 
         }
 
+        /*Debug.Log(this.GetInstanceID());
+        Debug.Log("MoveOrigin");*/
         return origin;
     }
 
@@ -101,6 +105,7 @@ public class Animal : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
 
         Vector3 randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
+        
         agent.SetDestination(randomDestination);
         SetState(AnimalState.Moving);
 

@@ -12,22 +12,41 @@ public class Predator : Animal
     [SerializeField] private int biteDamage = 4;
     [SerializeField] private float biteCooldown = 1;
 
+    public Collider[] colliders = new Collider[10];
+
+
+
     private Prey currentChaseTarget;
+    private PlayerMoment currentPlayerTarget;
+
 
     protected override void CheckChaseConditions()
     {
         if (currentChaseTarget)
             return;
-
-        Collider[] colliders = new Collider[10];
+        
         int numColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRange, colliders);
 
-        
+        for (int i = 0; i < numColliders; i++)
+        {
+            PlayerMoment target = colliders[i].GetComponent<PlayerMoment>();
+
+            if (target != null)
+            {
+                Debug.Log("Player");
+                ChasePlayer(target);
+                return;
+            }
+
+        }
+
         for (int i=0; i < numColliders; i++)
         {
             Prey prey = colliders[i].GetComponent<Prey>();
+
             if (prey != null)
             {
+                Debug.Log("Sheep");
                 StartChase(prey);
                 return;
             }
@@ -42,6 +61,12 @@ public class Predator : Animal
         SetState(AnimalState.Chase);
     }
 
+    private void ChasePlayer(PlayerMoment playerTarget)
+    {
+        currentPlayerTarget = playerTarget;
+        SetState(AnimalState.Chase);
+    }
+
     protected override void HandleChaseState()
     {
         if (currentChaseTarget != null)
@@ -49,9 +74,30 @@ public class Predator : Animal
             currentChaseTarget.AlertPrey(this);
             StartCoroutine(ChasePrey());
         }
+        else if(currentPlayerTarget != null)
+        {
+            StartCoroutine(ChasePlayer());
+        }
         else
         {
             SetState(AnimalState.Idle);
+        }
+    }
+
+    private IEnumerator ChasePlayer()
+    {
+        float startTime = Time.time;
+        while (true)
+        {
+            if (Time.time - startTime >= maxChaseTime || currentPlayerTarget == null)
+            {
+                StopChase();
+                yield break;
+            }
+
+            SetState(AnimalState.Chase);
+            agent.SetDestination(currentPlayerTarget.transform.position);
+            yield return null;
         }
     }
 
@@ -86,6 +132,7 @@ public class Predator : Animal
     {
         agent.ResetPath();
         currentChaseTarget = null;
+        currentPlayerTarget = null;
         SetState(AnimalState.Moving);
 
     }
