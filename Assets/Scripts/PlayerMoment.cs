@@ -9,7 +9,11 @@ public class PlayerMoment : MonoBehaviour
     public Transform cam;
 
     public float gravity = -9.81f;
-    public float speed = 6.0f;
+    public float speed;
+
+    [Header("Movement System")]
+    public float walkSpeed = 4.0f;
+    public float runSpeed = 8.0f;
     public float jumpHeight = 4f;
 
     private Vector3 velocity;
@@ -20,18 +24,21 @@ public class PlayerMoment : MonoBehaviour
     [SerializeField] float turnSmoothTime = 0.1f;
     private float turnSmoothVelocity;
 
+    private Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
         
         controller = GetComponent<CharacterController>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Gravity();
-        Jump();
+        //Jump();
         GetDirectionAndMove();
     }
 
@@ -49,6 +56,19 @@ public class PlayerMoment : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir * speed * Time.deltaTime);
+        }
+
+        anim.SetFloat("Speed", direction.magnitude);
+
+        if (Input.GetButton("Sprint") && IsGrounded())
+        {
+            speed = runSpeed;
+            anim.SetBool("Run",true);
+        }
+        else
+        {
+            speed = walkSpeed;
+            anim.SetBool("Run", false);
         }
     }
 
@@ -76,9 +96,10 @@ public class PlayerMoment : MonoBehaviour
         }
     }
 
-    /*private void OnDrawGizmos()
+
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(spherePos, controller.radius - 0.05f);
-    }*/
+    }
 }
