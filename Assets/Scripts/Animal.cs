@@ -27,10 +27,13 @@ public class Animal : MonoBehaviour
     [SerializeField] private float runSpeed = 8f;
 
     [Header("Attributes")]
-    [SerializeField] private int health = 10;
+    [SerializeField] private int Maxhealth = 10;
+    private int currenthealth;
 
     protected NavMeshAgent agent;
     protected AnimalState currentState = AnimalState.Idle;
+
+    private HeathBar healthBar;
 
     void Start()
     {
@@ -39,8 +42,13 @@ public class Animal : MonoBehaviour
 
     protected virtual void InitialseAnimal()
     {
+
+        healthBar = transform.GetChild(1).GetComponentInChildren<HeathBar>();
+        healthBar.SetMaxHeath(Maxhealth);
+
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
+        currenthealth = Maxhealth;
 
         currentState = AnimalState.Idle;
         UpdateState();
@@ -155,9 +163,10 @@ public class Animal : MonoBehaviour
 
     public virtual void RecieveDamage(int damage)
     {
-        health -= damage;
+        currenthealth -= damage;
+        healthBar.SetMaxHeath(currenthealth);
 
-        if (health <= 0)
+        if (currenthealth <= 0)
             Die();
     }
 

@@ -9,7 +9,7 @@ public class PlayerMoment : MonoBehaviour
     public Transform cam;
 
     public float gravity = -9.81f;
-    public float speed;
+    [HideInInspector] public float speed;
 
     [Header("Movement System")]
     public float walkSpeed = 4.0f;
@@ -97,9 +97,9 @@ public class PlayerMoment : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(spherePos, controller.radius - 0.05f);
-    }
+    }*/
 }

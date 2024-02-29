@@ -10,14 +10,14 @@ public class Predator : Animal
     [SerializeField] private float detectionRange = 20f;
     [SerializeField] private float maxChaseTime = 10f;
     [SerializeField] private int biteDamage = 4;
-    [SerializeField] private float biteCooldown = 1;
+    [SerializeField] private float biteCooldown = 5;
 
     public Collider[] colliders = new Collider[10];
 
 
 
     private Prey currentChaseTarget;
-    private PlayerMoment currentPlayerTarget;
+    private PlayerManager currentPlayerTarget;
 
 
     protected override void CheckChaseConditions()
@@ -29,11 +29,11 @@ public class Predator : Animal
 
         for (int i = 0; i < numColliders; i++)
         {
-            PlayerMoment target = colliders[i].GetComponent<PlayerMoment>();
+            PlayerManager target = colliders[i].GetComponent<PlayerManager>();
 
             if (target != null)
             {
-                Debug.Log("Player");
+                //Debug.Log("Player");
                 ChasePlayer(target);
                 return;
             }
@@ -46,7 +46,7 @@ public class Predator : Animal
 
             if (prey != null)
             {
-                Debug.Log("Sheep");
+                //Debug.Log("Sheep");
                 StartChase(prey);
                 return;
             }
@@ -61,21 +61,25 @@ public class Predator : Animal
         SetState(AnimalState.Chase);
     }
 
-    private void ChasePlayer(PlayerMoment playerTarget)
+    private void ChasePlayer(PlayerManager playerTarget)
     {
+        Debug.Log("StartChasePlyer");
         currentPlayerTarget = playerTarget;
         SetState(AnimalState.Chase);
     }
 
     protected override void HandleChaseState()
     {
+        
         if (currentChaseTarget != null)
         {
             currentChaseTarget.AlertPrey(this);
+            base.HandleChaseState();
             StartCoroutine(ChasePrey());
         }
         else if(currentPlayerTarget != null)
         {
+            base.HandleChaseState();
             StartCoroutine(ChasePlayer());
         }
         else
@@ -87,7 +91,7 @@ public class Predator : Animal
     private IEnumerator ChasePlayer()
     {
         float startTime = Time.time;
-        while (true)
+        while (currentPlayerTarget != null && Vector3.Distance(transform.position, currentPlayerTarget.transform.position) > agent.stoppingDistance)
         {
             if (Time.time - startTime >= maxChaseTime || currentPlayerTarget == null)
             {
@@ -99,6 +103,25 @@ public class Predator : Animal
             agent.SetDestination(currentPlayerTarget.transform.position);
             yield return null;
         }
+
+        Debug.Log("Stop");
+
+        if (currentPlayerTarget)
+        {
+            Debug.Log("BiT");
+            currentPlayerTarget.RecieveDamage(biteDamage);
+        }
+
+        Debug.Log("Wait");
+        yield return new WaitForSeconds(5);
+        Debug.Log("OK");
+
+        Debug.Break();
+
+        currentPlayerTarget = null;
+        HandleChaseState();
+        CheckChaseConditions();
+
     }
 
     private IEnumerator ChasePrey()
@@ -120,9 +143,10 @@ public class Predator : Animal
 
         if (currentChaseTarget)
             currentChaseTarget.RecieveDamage(biteDamage);
+        
 
         yield return new WaitForSeconds(biteCooldown);
-
+        
         currentChaseTarget = null;
         HandleChaseState();
         CheckChaseConditions();
