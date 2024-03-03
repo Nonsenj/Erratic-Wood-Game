@@ -10,7 +10,7 @@ public class Predator : Animal
     [SerializeField] private float detectionRange = 20f;
     [SerializeField] private float maxChaseTime = 10f;
     [SerializeField] private int biteDamage = 4;
-    [SerializeField] private float biteCooldown = 5;
+    [SerializeField] private float biteCooldown = 1;
 
     public Collider[] colliders = new Collider[10];
 
@@ -63,7 +63,7 @@ public class Predator : Animal
 
     private void ChasePlayer(PlayerManager playerTarget)
     {
-        Debug.Log("StartChasePlyer");
+        //Debug.Log("StartChasePlyer");
         currentPlayerTarget = playerTarget;
         SetState(AnimalState.Chase);
     }
@@ -104,19 +104,13 @@ public class Predator : Animal
             yield return null;
         }
 
-        Debug.Log("Stop");
-
         if (currentPlayerTarget)
         {
-            Debug.Log("BiT");
             currentPlayerTarget.RecieveDamage(biteDamage);
         }
 
-        Debug.Log("Wait");
         yield return new WaitForSeconds(5);
-        Debug.Log("OK");
 
-        Debug.Break();
 
         currentPlayerTarget = null;
         HandleChaseState();
@@ -143,7 +137,8 @@ public class Predator : Animal
 
         if (currentChaseTarget)
             currentChaseTarget.RecieveDamage(biteDamage);
-        
+
+        //Debug.Log("BiT");
 
         yield return new WaitForSeconds(biteCooldown);
         
@@ -168,5 +163,6 @@ public class Predator : Animal
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, wanderDistance);
     }
+
 
 }

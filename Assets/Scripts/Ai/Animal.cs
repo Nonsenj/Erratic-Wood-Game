@@ -164,7 +164,7 @@ public class Animal : MonoBehaviour
     public virtual void RecieveDamage(int damage)
     {
         currenthealth -= damage;
-        healthBar.SetMaxHeath(currenthealth);
+        healthBar.SetHeath(currenthealth);
 
         if (currenthealth <= 0)
             Die();
@@ -175,4 +175,6 @@ public class Animal : MonoBehaviour
         StopAllCoroutines();
         Destroy(gameObject);
     }
+
+    
 }
