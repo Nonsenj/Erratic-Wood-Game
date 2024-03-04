@@ -4,12 +4,23 @@ using UnityEngine;
 
 public class Plot : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string _prompt;
+    private string _prompt = "[E] Plant a seed";
     public string InteractionPrompt => _prompt;
 
+    
     public bool Interact(Interactor interactor)
     {
-        Debug.Log("Plot");
-        return true;
+        var inventory = interactor.GetComponent<Inventory>();
+        if (inventory == null) return false;
+
+        if (inventory.HasSeed)
+        {
+            _prompt = "Tomato";
+            Debug.Log("Plant");
+            return true;
+        }
+
+        Debug.Log("No have a seed");
+        return false;
     }
 }
