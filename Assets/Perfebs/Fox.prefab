@@ -92,15 +92,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wanderDistance: 15
-  walkSpeed: 5
+  walkSpeed: 7
   maxWalkTime: 6
   idleTime: 5
   runSpeed: 8
   Maxhealth: 10
-  detectionRange: 12.48
+  detectionRange: 13
   maxChaseTime: 10
   biteDamage: 4
-  biteCooldown: 1
+  biteCooldown: 0.5
   colliders:
   - {fileID: 0}
   - {fileID: 0}
