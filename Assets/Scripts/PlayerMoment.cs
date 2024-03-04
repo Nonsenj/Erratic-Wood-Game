@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMoment : MonoBehaviour
 {
     CharacterController controller;
-    public Transform cam;
+    public Transform cam { get; private set; }
 
     public float gravity = -9.81f;
     [HideInInspector] public float speed;
@@ -32,6 +32,10 @@ public class PlayerMoment : MonoBehaviour
         
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        cam = Camera.main.transform;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -60,6 +64,7 @@ public class PlayerMoment : MonoBehaviour
 
         anim.SetFloat("Speed", direction.magnitude);
 
+        
         if (Input.GetButton("Sprint") && IsGrounded())
         {
             speed = runSpeed;
