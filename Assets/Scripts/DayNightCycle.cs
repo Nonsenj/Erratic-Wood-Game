@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
+    public static DayNightCycle instance { get; set; }
+
     [Header("Gradients")]
     [SerializeField] private Gradient skyColor;
     [SerializeField] private Gradient equatorColor;
@@ -16,11 +18,28 @@ public class DayNightCycle : MonoBehaviour
     [SerializeField,Range(0,24)] private float timeOfDay;
     [SerializeField] private float sunRotationSpeed;
 
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
     private void Update()
     {
         timeOfDay += Time.deltaTime * sunRotationSpeed;
-        if (timeOfDay > 24) 
+
+        if (timeOfDay > 24)
+        {
             timeOfDay = 0;
+            TimeManager.instance.TriggerNextDay();
+        }
+            
 
         UpdateSunRotation();
         UpdateLighting();
