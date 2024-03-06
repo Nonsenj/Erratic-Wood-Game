@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4090981067107542668}
   - component: {fileID: 7677097864557596274}
   m_Layer: 5
-  m_Name: HeathBar
+  m_Name: HeathBarAnimal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 1.2000122}
   m_SizeDelta: {x: 503, y: 361}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7428344175567284266
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &4090981067107542668
 MonoBehaviour:
   m_ObjectHideFlags: 0

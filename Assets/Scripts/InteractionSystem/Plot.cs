@@ -15,10 +15,13 @@ public class Plot : MonoBehaviour, IInteractable
     public bool Interact(Interactor interactor)
     {
         var inventory = interactor.GetComponent<Inventory>();
+        PlayerManager player = interactor.GetComponent<PlayerManager>();
+
         if (inventory == null) return false;
 
         if (inventory.HasSeed && isEmpty)
         {
+            player.UseEnergy(10);
             _prompt = "Tomato";
             GameObject instantiatedPlant = Instantiate(plant);
             instantiatedPlant.transform.parent = gameObject.transform;
@@ -29,7 +32,6 @@ public class Plot : MonoBehaviour, IInteractable
             currentPlant = instantiatedPlant.GetComponent<Plant>();
             currentPlant.dayOfPlaning = TimeManager.instance.dayInGame;
             isEmpty = false;
-            Debug.Log("Plant");
             return true;
         }
 
