@@ -13,6 +13,12 @@ public class Interactor : MonoBehaviour
     [SerializeField] private int _numFound;
 
     private IInteractable _interactable;
+    private PlayerManager playermanager;
+
+    private void Start()
+    {
+        playermanager = gameObject.GetComponent<PlayerManager>();
+    }
 
     // Update is called once per frame
     void Update()

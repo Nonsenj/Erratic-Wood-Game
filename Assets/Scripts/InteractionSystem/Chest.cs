@@ -9,6 +9,7 @@ public class Chest : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
+        
         var inventory = interactor.GetComponent<Inventory>();
         if (inventory == null) return false;
 

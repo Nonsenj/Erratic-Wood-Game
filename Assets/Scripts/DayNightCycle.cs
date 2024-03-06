@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DayNightCycle : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class DayNightCycle : MonoBehaviour
     [Header("Variables")]
     [SerializeField,Range(0,24)] private float timeOfDay;
     [SerializeField] private float sunRotationSpeed;
+
+    public Text TimeUI;
 
     private void Awake()
     {
@@ -39,7 +42,10 @@ public class DayNightCycle : MonoBehaviour
             timeOfDay = 0;
             TimeManager.instance.TriggerNextDay();
         }
-            
+
+        TimeUI.text = $"{((int)timeOfDay)}";
+
+
 
         UpdateSunRotation();
         UpdateLighting();
