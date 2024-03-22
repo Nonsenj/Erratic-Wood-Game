@@ -19,8 +19,9 @@ public class Plot : MonoBehaviour, IInteractable
 
         if (inventory == null) return false;
 
-        if (inventory.HasSeed && isEmpty)
+        if (inventory.checkisseep() && isEmpty)
         {
+            inventory.UseSelectedItem();
             player.UseEnergy(10);
             _prompt = "Tomato";
             GameObject instantiatedPlant = Instantiate(plant);

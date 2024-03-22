@@ -14,8 +14,6 @@ public class Predator : Animal
 
     public Collider[] colliders = new Collider[10];
 
-
-
     private Prey currentChaseTarget;
     private PlayerManager currentPlayerTarget;
 
@@ -156,13 +154,13 @@ public class Predator : Animal
 
     }
 
-    /*private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, wanderDistance);
-    }*/
+    }
 
 
 }
