@@ -163,6 +163,7 @@ public class Animal : MonoBehaviour
 
     public virtual void RecieveDamage(int damage)
     {
+        Debug.Log("currenthealth = " + currenthealth);
         currenthealth -= damage;
         healthBar.SetHeath(currenthealth);
 

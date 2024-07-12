@@ -124,8 +124,10 @@ public class Predator : Animal
         {
             if (Time.time - startTime >= maxChaseTime || currentChaseTarget == null)
             {
+                
                 StopChase();
                 yield break;
+                
             }
 
             SetState(AnimalState.Chase);
@@ -136,7 +138,6 @@ public class Predator : Animal
         if (currentChaseTarget)
             currentChaseTarget.RecieveDamage(biteDamage);
 
-        //Debug.Log("BiT");
 
         yield return new WaitForSeconds(biteCooldown);
         

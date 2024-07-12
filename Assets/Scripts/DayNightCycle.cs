@@ -73,6 +73,12 @@ public class DayNightCycle : MonoBehaviour
         Sun.color = sunColor.Evaluate(timeFraction);
     }
 
+    public void SkipDay()
+    {
+        timeOfDay = 6.00f;
+        TimeManager.instance.TriggerNextDay();
+    }
+
 
 
 }
