@@ -6,22 +6,47 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private HeathBar healthBar;
     [SerializeField] private EnergyBar energyBar;
+    [SerializeField] private Coin coin;
 
     [Header("Attributes")]
     [SerializeField] private int MaxHeath;
     [SerializeField] private int MaxEnergy;
+    [SerializeField] private int InitCoin;
 
     public int currentHeath {  get; private set; }
     public int currentEnergy { get; private set; }
+    public int currentCoin { get; private set; }
 
 
 
     private void Start()
     {
+        SetCoin(InitCoin);
         SetMaxHeath(MaxHeath);
         SetMaxEnergy(MaxEnergy);
+
         healthBar.SetMaxHeath(MaxHeath);
         energyBar.SetMaxEnergy(MaxEnergy);
+    }
+
+    protected virtual void SetCoin(int Amount)
+    {
+        currentCoin = Amount;
+        coin.SetAmount(Amount);
+    }
+
+    public virtual void UseCoin(int Amount)
+    {
+        currentCoin -= Amount;
+        coin.SetAmount(currentCoin);
+
+    }
+
+    public virtual void AddCoin(int Amount)
+    {
+        currentCoin += Amount;
+        coin.SetAmount(currentCoin);
+
     }
 
     protected virtual void SetMaxEnergy(int Energy)

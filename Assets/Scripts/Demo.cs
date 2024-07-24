@@ -5,11 +5,26 @@ using UnityEngine;
 public class Demo : MonoBehaviour
 {
     public InventoryManager inventoryManager;
+    public PlayerManager coin;
     public Item[] itemsToPickup;
 
     public void PickupItem(int id)
     {
         bool result = inventoryManager.AddItem(itemsToPickup[id]);
+    }
+
+    public void SellItem(int id)
+    {
+        if (coin.currentCoin >= 0)
+        {
+            inventoryManager.AddItem(itemsToPickup[id]);
+            switch (id)
+            {
+                case 0: coin.UseCoin(20); break;
+                case 1: coin.UseCoin(10); break;
+                case 2: coin.UseCoin(50); break;
+            }
+        }
 
     }
 

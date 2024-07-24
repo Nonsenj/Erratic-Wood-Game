@@ -24,22 +24,28 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void GetSelectedItem()
+    public Item GetSelectedItem()
     {
         currentItem = inventoryManager.GetSelectedItem(false);
         if (currentItem != null)
         {
-            Debug.Log("Received item" + currentItem);
+            return currentItem;
         }
         else
         {
-            Debug.Log("No item received!");
+            return currentItem;
         }
     }
 
     public bool checkisseep()
     {
         GetSelectedItem();
+
+        if (currentItem == null)
+        {
+            return false;
+        }
+
         if (currentItem.type == ItemType.Seed) { return true; }
         return false;
     }

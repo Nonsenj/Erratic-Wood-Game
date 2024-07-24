@@ -26,6 +26,8 @@ public class Plant : MonoBehaviour
     [SerializeField] bool isOneTimeHarvest;
     [SerializeField] bool isWatered;
 
+    public bool haveProduce = false;
+
     private void OnEnable()
     {
         TimeManager.instance.OnDayPass.AddListener(DayPass);
@@ -52,8 +54,8 @@ public class Plant : MonoBehaviour
     {
         if (plantAge == ageForFirstProduceBatch)
         {
-            Debug.Log("Produce");
             GenerateProduceForEmptySpawns();
+            haveProduce = true;
         }
 
         if (plantAge > ageForFirstProduceBatch)
@@ -62,6 +64,7 @@ public class Plant : MonoBehaviour
             if (daysRemainingForNewProduceCounter == 0)
             {
                 GenerateProduceForEmptySpawns();
+                haveProduce = true;
                 daysRemainingForNewProduceCounter = daysForNewProduce;
             }
             else
@@ -77,7 +80,6 @@ public class Plant : MonoBehaviour
     {
         foreach (GameObject spawn in plantProduceSpawns)
         {
-            Debug.Log(spawn.transform.childCount == 0);
             if (spawn.transform.childCount == 0)
             {
                 GameObject produce = Instantiate(producePrefab);

@@ -6,6 +6,8 @@ using UnityEngine;
 public class Plot : MonoBehaviour, IInteractable
 {
     [SerializeField] GameObject plant;
+    [SerializeField] Item Item;
+    [SerializeField] InventoryManager inventoryManger;
     private Plant currentPlant;
     private bool isEmpty = true;
     private string _prompt = "[E] Plant a seed";
@@ -17,7 +19,7 @@ public class Plot : MonoBehaviour, IInteractable
         var inventory = interactor.GetComponent<Inventory>();
         PlayerManager player = interactor.GetComponent<PlayerManager>();
 
-        if (inventory == null) return false;
+        Debug.Log(inventoryManger);
 
         if (inventory.checkisseep() && isEmpty)
         {
@@ -36,7 +38,19 @@ public class Plot : MonoBehaviour, IInteractable
             return true;
         }
 
-        
+        if (currentPlant != null)
+        {
+            if (currentPlant.haveProduce)
+            {
+                inventoryManger.AddItem(Item);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         Debug.Log("No have a seed");
         return false;
     }
