@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Plant : MonoBehaviour
@@ -73,6 +74,17 @@ public class Plant : MonoBehaviour
             }
         }
         
+
+    }
+
+    public void CropYield()
+    {
+        foreach (GameObject item in plantProduceSpawns)
+        {
+            foreach (Transform child in item.transform) { 
+                Destroy(child.gameObject);
+            }
+        }
 
     }
 

@@ -43,6 +43,7 @@ public class Plot : MonoBehaviour, IInteractable
             if (currentPlant.haveProduce)
             {
                 inventoryManger.AddItem(Item);
+                currentPlant.CropYield();
                 return true;
             }
             else
